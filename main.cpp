@@ -1,3 +1,6 @@
+// Antonio Noguerón & Armando Arredondo
+// 09/29/2022
+
 #include <iostream>
 #include "DoubleLinkedList.h"
 

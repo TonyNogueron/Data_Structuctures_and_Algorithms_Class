@@ -1,6 +1,5 @@
-//
-// Created by Antonio Nogueron Barcenas on 9/22/22.
-//
+// Antonio Noguerón & Armando Arredondo
+// 09/29/2022
 
 #include "NodePointer.h"
 

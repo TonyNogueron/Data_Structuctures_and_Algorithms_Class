@@ -1,6 +1,5 @@
-//
-// Created by Antonio Nogueron Barcenas on 9/26/22.
-//
+// Antonio Noguerón & Armando Arredondo
+// 09/29/2022
 
 #include "DoubleLinkedList.h"
 #include "DoubleNodePointer.h"
@@ -24,24 +23,24 @@ void DoubleLinkedList::setHead(DoubleNodePointer * head_) {
     head = head_;
 }
 
-void DoubleLinkedList::appendInOrder(int data) {
-    DoubleNodePointer* newNode = new DoubleNodePointer(data);
-    if(isEmpty()){
+void DoubleLinkedList::appendInOrder(int data) { // Complejidad O(N)
+    DoubleNodePointer* newNode = new DoubleNodePointer(data); //Creamos el nuevo nodo
+    if(isEmpty()){ // si está vacía entonces el nuevo nodo es la cabeza de la lista
         head = newNode;
     } else {
-        DoubleNodePointer* previous = head, *aux = head;
-        while( aux != nullptr && aux->getData() <= data ){
+        DoubleNodePointer* previous = head, *aux = head; //Creamos nuestros apuntadores auxiliares
+        while( aux != nullptr && aux->getData() <= data ){ //Nos movemos con los apuntadores hasta encontrar el lugar donde entra el nodo
             previous = aux;
             aux = aux->getNext();
         }
-        if (aux == nullptr){
+        if (aux == nullptr){ // si estamos al final
             previous->setNext(newNode);
             newNode->setPrev(previous);
-        } else if (aux == previous){
+        } else if (aux == previous){ // si va en el primer elemento
             newNode->setNext(head);
             head->setPrev(newNode);
             head = newNode;
-        } else {
+        } else { // en cualquier otro caso
             previous->setNext(newNode);
             newNode->setNext(aux);
             newNode->setPrev(previous);
@@ -50,13 +49,13 @@ void DoubleLinkedList::appendInOrder(int data) {
     }
 }
 
-void DoubleLinkedList::printList() {
+void DoubleLinkedList::printList() { // Complejidad O(N)
     string auxText;
     if(isEmpty()){
         cout << "The list is empty" << "\n";
     } else {
         DoubleNodePointer* aux = head;
-        while(aux != nullptr){
+        while(aux != nullptr){ // Vamos recorriendo la lista y formateamos el output
             if (aux->getPrev() != nullptr){
                 auxText = "<Previo: " + to_string(aux->getPrev()->getData());
             } else {
@@ -69,7 +68,7 @@ void DoubleLinkedList::printList() {
     }
 }
 
-void DoubleLinkedList::remove(int data) {
+void DoubleLinkedList::remove(int data) { // Complejidad O(N)
     if (head == nullptr){
         cout << "The list is empty" << "\n";
     } else {
@@ -94,7 +93,7 @@ void DoubleLinkedList::remove(int data) {
     }
 }
 
-void DoubleLinkedList::push_back(int data) {
+void DoubleLinkedList::push_back(int data) { // Complejidad O(N)
     DoubleNodePointer* newNode = new DoubleNodePointer(data);
     if (head == nullptr){
         head = newNode;
@@ -109,7 +108,7 @@ void DoubleLinkedList::push_back(int data) {
     }
 }
 
-void DoubleLinkedList::insert(int data) {
+void DoubleLinkedList::insert(int data) { // Complejidad O(1)
     DoubleNodePointer* newNode = new DoubleNodePointer(data);
     if (head == nullptr){
         head = newNode;
@@ -120,7 +119,7 @@ void DoubleLinkedList::insert(int data) {
     }
 }
 
-void DoubleLinkedList::pop_back() {
+void DoubleLinkedList::pop_back() { // Complejidad O(N)
     if (isEmpty()){
         cout << "The list is empty" << "\n";
     } else {
@@ -139,7 +138,7 @@ void DoubleLinkedList::pop_back() {
     }
 }
 
-void DoubleLinkedList::pop_first() {
+void DoubleLinkedList::pop_first() { // Complejidad O(1)
     if (isEmpty()){
         cout << "The list is empty" << "\n";
     } else {
@@ -150,7 +149,7 @@ void DoubleLinkedList::pop_first() {
     }
 }
 
-DoubleNodePointer* DoubleLinkedList::find(int data) {
+DoubleNodePointer* DoubleLinkedList::find(int data) { // Complejidad O(N)
     if (isEmpty()){
         cout << "The list is empty" << "\n";
         return nullptr;
@@ -167,7 +166,7 @@ DoubleNodePointer* DoubleLinkedList::find(int data) {
     }
 }
 
-int DoubleLinkedList::locate(int data) {
+int DoubleLinkedList::locate(int data) { // Complejidad O(N)
     if (isEmpty()){
         cout << "The list is empty" << "\n";
         return NULL;
@@ -186,7 +185,7 @@ int DoubleLinkedList::locate(int data) {
     }
 }
 
-int DoubleLinkedList::getLength() {
+int DoubleLinkedList::getLength() { // Complejidad O(N)
     int length = 0;
     if(isEmpty()){
         return 0;
@@ -200,7 +199,7 @@ int DoubleLinkedList::getLength() {
     return length;
 }
 
-int DoubleLinkedList::getFirst() {
+int DoubleLinkedList::getFirst() { // Complejidad O(1)
     if (isEmpty()){
         cout << "The list is empty" << "\n";
         return NULL;
@@ -209,7 +208,7 @@ int DoubleLinkedList::getFirst() {
     }
 }
 
-int DoubleLinkedList::getLast() {
+int DoubleLinkedList::getLast() { // Complejidad O(N)
     if (isEmpty()){
         cout << "The list is empty" << "\n";
         return NULL;
@@ -222,11 +221,11 @@ int DoubleLinkedList::getLast() {
     }
 }
 
-bool DoubleLinkedList::isEmpty() {
+bool DoubleLinkedList::isEmpty() { // Complejidad O(1)
     return (head == nullptr);
 }
 
-void DoubleLinkedList::removeDuplicates() {
+void DoubleLinkedList::removeDuplicates() { // Complejidad O(Nˆ2)
     if(isEmpty()){
         cout << "The list is empty \n";
     } else {
@@ -249,8 +248,7 @@ void DoubleLinkedList::removeDuplicates() {
     }
 }
 
-ostream& operator<<(ostream& os, DoubleLinkedList doubleList)
-{
+ostream& operator<<(ostream& os, DoubleLinkedList doubleList){ // Complejidad O(N)
     os << "|| Contenido de la lista ligada || \n" <<
           "================================== \n";
     if (doubleList.isEmpty()){
@@ -278,7 +276,7 @@ ostream& operator<<(ostream& os, DoubleLinkedList doubleList)
         return os;
 }
 
-DoubleLinkedList DoubleLinkedList::operator+(DoubleLinkedList lista2) {
+DoubleLinkedList DoubleLinkedList::operator+(DoubleLinkedList lista2) { // Complejidad O(N+M)
     DoubleLinkedList answer;
     DoubleNodePointer* previous = head, *aux = head;
     if(isEmpty()){
@@ -312,11 +310,11 @@ DoubleLinkedList DoubleLinkedList::operator+(DoubleLinkedList lista2) {
     }
 }
 
-void DoubleLinkedList::operator+=(int dato) {
+void DoubleLinkedList::operator+=(int dato) { // Complejidad O(N)
     appendInOrder(dato);
 }
 
-void DoubleLinkedList::operator--() {
+void DoubleLinkedList::operator--() { // Complejidad O(N)
     if(!isEmpty()){
         pop_back();
     }
