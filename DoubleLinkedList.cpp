@@ -69,21 +69,21 @@ void DoubleLinkedList::printList() { // Complejidad O(N)
 }
 
 void DoubleLinkedList::remove(int data) { // Complejidad O(N)
-    if (head == nullptr){
+    if (isEmpty()){ // Si está vacía no podemos eliminar e imprimimos que la lista está vacía.
         cout << "The list is empty" << "\n";
     } else {
-        DoubleNodePointer *previous = head, *aux = head;
-        while (aux != nullptr && aux->getData() != data) {
+        DoubleNodePointer *previous = head, *aux = head; // Creamos los apuntadores auxiliares
+        while (aux != nullptr && aux->getData() != data) { //recorremos la lista buscando el elemento a borrar
             previous = aux;
             aux = aux->getNext();
         }
-        if (aux == nullptr) {
+        if (aux == nullptr) { // si terminamos de recorrer es porque no hubo elemento
             cout << "Element was not found" << "\n";
-        } else if (previous == aux) {
+        } else if (previous == aux) { // si era el primer elemento lo eliminamos
             head = aux->getNext();
             head->setPrev(nullptr);
             delete aux;
-        } else {
+        } else { // Si se encuentra "en medio" conectamos los nodos y eliminamos el elemento
             previous->setNext(aux->getNext());
             if (aux->getNext() != nullptr){
                 aux->getNext()->setPrev(previous);
@@ -99,7 +99,7 @@ void DoubleLinkedList::push_back(int data) { // Complejidad O(N)
         head = newNode;
     } else {
         DoubleNodePointer *previous = head, *aux = head;
-        while (aux != nullptr){
+        while (aux != nullptr){ // recorremos la lista y cuando encontremos un apuntador a null, es ahí donde insertamos el nuevo nodo
             previous = aux;
             aux = aux->getNext();
         }
@@ -110,9 +110,9 @@ void DoubleLinkedList::push_back(int data) { // Complejidad O(N)
 
 void DoubleLinkedList::insert(int data) { // Complejidad O(1)
     DoubleNodePointer* newNode = new DoubleNodePointer(data);
-    if (head == nullptr){
+    if (head == nullptr){ //Si está vacía el nuevo nodo es la cabeza
         head = newNode;
-    } else {
+    } else { // si no, la cabeza es el segundo nodo, luego apuntamos a los nodos correctos y regresamos la cabeza al primer nodo
         newNode->setNext(head);
         head->setPrev(newNode);
         head = newNode;
@@ -124,7 +124,7 @@ void DoubleLinkedList::pop_back() { // Complejidad O(N)
         cout << "The list is empty" << "\n";
     } else {
         DoubleNodePointer *previous = head, *aux = head;
-        while (aux->getNext() != nullptr) {
+        while (aux->getNext() != nullptr) { // recorremos la lita y cuando llegamos al final, eliminamos el último elemento
             previous = aux;
             aux = aux->getNext();
         }
@@ -141,7 +141,7 @@ void DoubleLinkedList::pop_back() { // Complejidad O(N)
 void DoubleLinkedList::pop_first() { // Complejidad O(1)
     if (isEmpty()){
         cout << "The list is empty" << "\n";
-    } else {
+    } else { // Eliminamos la cabeza y hacemos que el 2do elemento sea la nueva cabeza
         DoubleNodePointer* aux = head;
         aux->getNext()->setPrev(nullptr);
         head = aux->getNext();
@@ -155,7 +155,7 @@ DoubleNodePointer* DoubleLinkedList::find(int data) { // Complejidad O(N)
         return nullptr;
     } else {
         DoubleNodePointer *aux = head;
-        while (aux != nullptr && aux->getData() != data) {
+        while (aux != nullptr && aux->getData() != data) { // recorremos hasta encontrar el elemento y regresamos el NodoPtr
             aux = aux->getNext();
         }
         if (aux == nullptr) {
@@ -173,7 +173,7 @@ int DoubleLinkedList::locate(int data) { // Complejidad O(N)
     } else {
         DoubleNodePointer *aux = head;
         int answer = -1;
-        while (aux != nullptr && aux->getData() != data) {
+        while (aux != nullptr && aux->getData() != data) { //Recorremos hasta encontrar el elemento y regresamos el índice de su posición
             aux = aux->getNext();
             ++answer;
         }
@@ -191,7 +191,7 @@ int DoubleLinkedList::getLength() { // Complejidad O(N)
         return 0;
     } else {
         DoubleNodePointer* aux = head;
-        while(aux != nullptr){
+        while(aux != nullptr){ // Recorremos la lista y llevamos un apuntador para contar los elementos
             ++length;
             aux = aux->getNext();
         }
@@ -230,8 +230,8 @@ void DoubleLinkedList::removeDuplicates() { // Complejidad O(Nˆ2)
         cout << "The list is empty \n";
     } else {
         DoubleNodePointer* previous = head, *aux = head;
-        while(previous != nullptr){
-            while(aux != nullptr){
+        while(previous != nullptr){ // Recorremos cada elemento de la lista y con un apuntador auxiliar
+            while(aux != nullptr){ // para cada elemento recorremos en busca de uno similar para eliminar aquel nodo donde aparezca
                 aux = aux -> getNext();
                 if (aux != nullptr && aux ->getData() == previous->getData()){
                     aux->getPrev()->setNext(aux->getNext());
@@ -256,7 +256,7 @@ ostream& operator<<(ostream& os, DoubleLinkedList doubleList){ // Complejidad O(
     } else {
             DoubleNodePointer* aux = doubleList.getHead();
             string auxText = "";
-            while(aux != nullptr){
+            while(aux != nullptr){ //Recoremos la lista y damos el formato para imprimirla
                 if (aux->getPrev() != nullptr){
                     auxText = "<Previo: " + to_string(aux->getPrev()->getData());
                 } else {
@@ -284,7 +284,7 @@ DoubleLinkedList DoubleLinkedList::operator+(DoubleLinkedList lista2) { // Compl
             return answer;
         } else {
             aux = lista2.getHead();
-            while (aux != nullptr) {
+            while (aux != nullptr) { // Si la primera lista está vacía, la respuesta es la lista 2, pero hay que copiar los elementos para no regresar la misma lista
                 previous = aux;
                 aux = aux->getNext();
                 answer.push_back(previous->getData());
@@ -293,14 +293,14 @@ DoubleLinkedList DoubleLinkedList::operator+(DoubleLinkedList lista2) { // Compl
         }
     } else {
         aux = head;
-        while (aux != nullptr) {
+        while (aux != nullptr) { // añadimos los elementos de la lista 1
             previous = aux;
             aux = aux->getNext();
             answer.push_back(previous->getData());
         }
         if (!lista2.isEmpty()){
             aux = lista2.getHead();
-            while (aux != nullptr) {
+            while (aux != nullptr) { // luego añadimos los de la lista 2
                 previous = aux;
                 aux = aux->getNext();
                 answer.push_back(previous->getData());
