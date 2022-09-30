@@ -30,7 +30,7 @@ void DoubleLinkedList::appendInOrder(int data) {
         head = newNode;
     } else {
         DoubleNodePointer* previous = head, *aux = head;
-        while(aux != nullptr && aux->getData() < data && aux->getNext() != nullptr && aux->getData() != aux->getNext()->getData()){
+        while( aux != nullptr && aux->getData() <= data ){
             previous = aux;
             aux = aux->getNext();
         }
@@ -42,15 +42,16 @@ void DoubleLinkedList::appendInOrder(int data) {
             head->setPrev(newNode);
             head = newNode;
         } else {
+            previous->setNext(newNode);
             newNode->setNext(aux);
             newNode->setPrev(previous);
-            previous->setNext(newNode);
+            aux->setPrev(newNode);
         }
     }
 }
 
 void DoubleLinkedList::printList() {
-    string auxText = "";
+    string auxText;
     if(isEmpty()){
         cout << "The list is empty" << "\n";
     } else {
@@ -80,12 +81,14 @@ void DoubleLinkedList::remove(int data) {
         if (aux == nullptr) {
             cout << "Element was not found" << "\n";
         } else if (previous == aux) {
-            aux->getNext()->setPrev(nullptr);
             head = aux->getNext();
+            head->setPrev(nullptr);
             delete aux;
         } else {
-            aux->getNext()->setPrev(previous);
             previous->setNext(aux->getNext());
+            if (aux->getNext() != nullptr){
+                aux->getNext()->setPrev(previous);
+            }
             delete aux;
         }
     }
@@ -164,6 +167,25 @@ DoubleNodePointer* DoubleLinkedList::find(int data) {
     }
 }
 
+int DoubleLinkedList::locate(int data) {
+    if (isEmpty()){
+        cout << "The list is empty" << "\n";
+        return NULL;
+    } else {
+        DoubleNodePointer *aux = head;
+        int answer = -1;
+        while (aux != nullptr && aux->getData() != data) {
+            aux = aux->getNext();
+            ++answer;
+        }
+        if (aux == nullptr) {
+            cout << "Element was not found. ";
+            return NULL;
+        }
+        return answer;
+    }
+}
+
 int DoubleLinkedList::getLength() {
     int length = 0;
     if(isEmpty()){
@@ -178,8 +200,53 @@ int DoubleLinkedList::getLength() {
     return length;
 }
 
+int DoubleLinkedList::getFirst() {
+    if (isEmpty()){
+        cout << "The list is empty" << "\n";
+        return NULL;
+    } else {
+        return head->getData();
+    }
+}
+
+int DoubleLinkedList::getLast() {
+    if (isEmpty()){
+        cout << "The list is empty" << "\n";
+        return NULL;
+    } else {
+        DoubleNodePointer* aux = head;
+        while(aux->getNext() != nullptr) {
+            aux = aux->getNext();
+        }
+        return aux->getData();
+    }
+}
+
 bool DoubleLinkedList::isEmpty() {
     return (head == nullptr);
+}
+
+void DoubleLinkedList::removeDuplicates() {
+    if(isEmpty()){
+        cout << "The list is empty \n";
+    } else {
+        DoubleNodePointer* previous = head, *aux = head;
+        while(previous != nullptr){
+            while(aux != nullptr){
+                aux = aux -> getNext();
+                if (aux != nullptr && aux ->getData() == previous->getData()){
+                    aux->getPrev()->setNext(aux->getNext());
+                    if(aux->getNext() != nullptr){
+                        aux->getNext()->setPrev(aux->getPrev());
+                    }
+                    delete aux;
+                    aux = previous;
+                }
+            }
+            previous = previous->getNext();
+            aux = previous;
+        }
+    }
 }
 
 ostream& operator<<(ostream& os, DoubleLinkedList doubleList)
@@ -207,6 +274,53 @@ ostream& operator<<(ostream& os, DoubleLinkedList doubleList)
                 aux = aux->getNext();
             }
         }
+        os << "\n";
         return os;
 }
+
+DoubleLinkedList DoubleLinkedList::operator+(DoubleLinkedList lista2) {
+    DoubleLinkedList answer;
+    DoubleNodePointer* previous = head, *aux = head;
+    if(isEmpty()){
+        if(lista2.isEmpty()){
+            return answer;
+        } else {
+            aux = lista2.getHead();
+            while (aux != nullptr) {
+                previous = aux;
+                aux = aux->getNext();
+                answer.push_back(previous->getData());
+            }
+            return answer;
+        }
+    } else {
+        aux = head;
+        while (aux != nullptr) {
+            previous = aux;
+            aux = aux->getNext();
+            answer.push_back(previous->getData());
+        }
+        if (!lista2.isEmpty()){
+            aux = lista2.getHead();
+            while (aux != nullptr) {
+                previous = aux;
+                aux = aux->getNext();
+                answer.push_back(previous->getData());
+            }
+        }
+        return answer;
+    }
+}
+
+void DoubleLinkedList::operator+=(int dato) {
+    appendInOrder(dato);
+}
+
+void DoubleLinkedList::operator--() {
+    if(!isEmpty()){
+        pop_back();
+    }
+}
+
+
 
